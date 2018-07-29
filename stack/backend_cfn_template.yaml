@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Api:
+    # enable CORS; to make more specific, change the origin wildcard
+    # to a particular domain name, e.g. "'www.example.com'"
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+
+Parameters:
+  APIDomainName:
+    Type: String
+    Default: api.xinkuo.me
+    Description : domain name for API endpoint
+Resources:
+  DBRecordTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+          - AttributeName: UID
+            AttributeType: S
+          - AttributeName: Timestamp
+            AttributeType: N
+      KeySchema:
+          - AttributeName: UID
+            KeyType: HASH
+          - AttributeName: Timestamp
+            KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: ServerlessReactExampleTable
+  PutDBRecordFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: DBRecordTable
+    Properties:
+      Handler: put_dbrecord_lambda.handler
+      Runtime: nodejs6.10
+      CodeUri: ../backend/js
+      Role: !GetAtt DDBUpdateRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DBRecordTable
+      Events:
+        PutDBRecordAPI:
+          Type: Api
+          Properties:
+            Path: /record/{uid}/{timestamp}
+            Method: put
+  DeleteDBRecordFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: DBRecordTable
+    Properties:
+      Handler: delete_dbrecord_lambda.handler
+      Runtime: nodejs6.10
+      CodeUri: ../backend/js
+      Role: !GetAtt DDBUpdateRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DBRecordTable
+      Events:
+        PutDBRecordAPI:
+          Type: Api
+          Properties:
+            Path: /record/{uid}/{timestamp}
+            Method: delete
+  ListDBRecordFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: DBRecordTable
+    Properties:
+      Handler: list_dbrecord_lambda.handler
+      Runtime: nodejs6.10
+      CodeUri: ../backend/js
+      Role: !GetAtt DDBUpdateRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DBRecordTable
+      Events:
+        PutDBRecordAPI:
+          Type: Api
+          Properties:
+            Path: /record/{uid}
+            Method: get
+  DDBUpdateRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+        - PolicyName: ServerlessReactDDBUpdatePolicy
+          PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                      - dynamodb:*
+                  Resource: !GetAtt DBRecordTable.Arn
+                - Effect: Allow
+                  Action:
+                  - logs:*
+                  Resource: arn:aws:logs:*:*:*
+  APIGatewayUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      ApiStages:
+      - ApiId: !Ref ServerlessRestApi
+        Stage: !Ref ServerlessRestApiProdStage
+      Description: Trial Plan 50 requests per day
+      Quota:
+        Limit: 10000
+        Period: MONTH
+      Throttle:
+        BurstLimit: 1
+        RateLimit: 1
+      UsagePlanName: serverless-react-example-usageplan

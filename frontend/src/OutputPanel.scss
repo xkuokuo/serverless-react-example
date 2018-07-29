@@ -1,0 +1,16 @@
+.OutputPanel {
+  text-align: left;
+  padding: 1rem
+}
+
+.OutputPanel td {
+  vertical-align: middle !important;
+}
+
+.OutputPanel .btn-delete {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.OutputPanel .btn-delete:hover {
+  background-color: #f2f2f2;
+}
