@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import InputPanel from './InputPanel.js';
+import IntroductionPanel from './IntroductionPanel.js';
 import OutputPanel from './OutputPanel.js';
 import Dashboard from './Dashboard.js';
 import { getUID } from './utils.js';
@@ -46,20 +47,29 @@ class App extends Component {
     return (
       <div className='App'>
       <div id='loading-modal' className='modal'>
-        <div className='loader'></div>
+      <div className='loader'></div>
       </div>
-      <header className='App-header'>
+      <header className='App-header card'>
       <h1 className='App-title'>Enjoy Serverless React Application</h1>
       </header>
       <div className='row'>
-      <div className='col-md-3'>
+      <div className='col-md-12 col-sm-12'>
+      <div className='card'>
+      <IntroductionPanel />
+      </div>
+      </div>
+      <div className='col-md-6 col-sm-12'>
+      <div className='card'>
       <InputPanel handleUpdate={this.handleUpdate} currentRegion={this.state.currentRegion} regions={regions} handleRegionChange={this.handleRegionChange}/>
       </div>
-      <div className='col-md-3'>
+      <div className='card'>
+      <Dashboard latencyMetrics={this.state.latencyMetrics} handleClearButtonClick={this.clearLatencyMetrics}/>
+      </div>
+      </div>
+      <div className='col-md-6 col-sm-12'>
+      <div className='card'>
       <OutputPanel dbRecords={this.state.dbRecords} handleDeleteButtonClick={this.handleDelete} handleRefreshButtonClick={this.handleGetRecords}/>
       </div>
-      <div className='col-md-6'>
-      <Dashboard latencyMetrics={this.state.latencyMetrics} handleClearButtonClick={this.clearLatencyMetrics}/>
       </div>
       </div>
       </div>

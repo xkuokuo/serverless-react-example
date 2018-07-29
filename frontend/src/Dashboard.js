@@ -14,7 +14,7 @@ class Dashboard extends Component {
     return (
       <div className='Dashboard'>
         <h3>End To End Latency Dashboard</h3>
-        <canvas id='myChart' ></canvas>
+        <canvas id='myChart'></canvas>
         <button id='clear-dashboard-btn' className='btn btn-info' onClick={this.handleClearButtonClick}>
           Clear
         </button>

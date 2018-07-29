@@ -17,9 +17,9 @@ class InputPanel extends Component {
 
   render() {
     return (
-      <div className='InputPanel'>
-        <div>
-          <h3 className=''>Select An AWS Data Center <br/>(default to US Virginia)</h3>
+      <div className='InputPanel row'>
+        <div className='col-md-6 col-sm-6'>
+          <h3 className=''>Select AWS Region</h3>
           <div className="btn-group-vertical btn-group-toggle" data-toggle="buttons">
             {
               this.createCheckboxes()
@@ -27,7 +27,7 @@ class InputPanel extends Component {
           </div>
         </div>
         <br/>
-        <div>
+        <div className='col-md-6 col-sm-6'>
           <h3 className=''>Add A New Record</h3>
           <form action='#'>
             <div className='form-group'>
