@@ -13,5 +13,5 @@ Please visit [serverless-example.xinkuo.me/](https://serverless-example.xinkuo.m
 Just do what ever CRUD operation you want, and check the end to end latency displayed on the dashboard.
 
 ## System Diagram
-![System Diagram](https://github.com/xkuokuo/serverless-react-example/tree/master/doc/images/aws_serverless_web_app.png)
+![System Diagram](doc/images/aws_serverless_web_app.png)
 
