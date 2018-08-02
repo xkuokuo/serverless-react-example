@@ -5,16 +5,28 @@ Globals:
     # enable CORS; to make more specific, change the origin wildcard
     # to a particular domain name, e.g. "'www.example.com'"
     Cors:
-      AllowMethods: "'*'"
+      AllowMethods: "'GET,OPTIONS,PUT,DELETE'"
       AllowHeaders: "'*'"
-      AllowOrigin: "'*'"
+      AllowOrigin: "'https://serverless-example.xinkuo.me'"
 
 Parameters:
   APIDomainName:
     Type: String
-    Default: api.xinkuo.me
-    Description : domain name for API endpoint
+    Default: api-serverless-example-us-east-1.xinkuo.me
+Mappings: 
+  RegionalCertificateArnMap: 
+    us-east-1: 
+      arn: arn:aws:acm:us-east-1:198711792892:certificate/02539496-55d0-4d48-bb04-638acb4e13ed
+    us-west-1: 
+      arn: arn:aws:acm:us-west-1:198711792892:certificate/3d2c608e-6d9c-4b62-ad17-9151635b5ff9
+    us-west-2: 
+      arn: arn:aws:acm:us-west-2:198711792892:certificate/68a17c24-3e9e-4f03-aa92-a84fcb54d17a
 Resources:
+  LambdaFunctionStorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Join: [ "", ["serverless-example-lambda-", !Ref "AWS::Region"]]
   DBRecordTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -31,10 +43,12 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: ServerlessReactExampleTable
+      TableName: ServerlessExampleTable
   PutDBRecordFunction:
     Type: AWS::Serverless::Function
-    DependsOn: DBRecordTable
+    DependsOn:
+    - DBRecordTable
+    - LambdaFunctionStorageBucket
     Properties:
       Handler: put_dbrecord_lambda.handler
       Runtime: nodejs6.10
@@ -43,6 +57,8 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref DBRecordTable
+          DOMAIN_NAME:
+            Fn::Join: [ "", ["api-serverless-example-", !Ref "AWS::Region", ".xinkuo.me"]]
       Events:
         PutDBRecordAPI:
           Type: Api
@@ -51,7 +67,9 @@ Resources:
             Method: put
   DeleteDBRecordFunction:
     Type: AWS::Serverless::Function
-    DependsOn: DBRecordTable
+    DependsOn:
+    - DBRecordTable
+    - LambdaFunctionStorageBucket
     Properties:
       Handler: delete_dbrecord_lambda.handler
       Runtime: nodejs6.10
@@ -68,7 +86,9 @@ Resources:
             Method: delete
   ListDBRecordFunction:
     Type: AWS::Serverless::Function
-    DependsOn: DBRecordTable
+    DependsOn:
+    - DBRecordTable
+    - LambdaFunctionStorageBucket
     Properties:
       Handler: list_dbrecord_lambda.handler
       Runtime: nodejs6.10
@@ -96,7 +116,7 @@ Resources:
           Action:
           - sts:AssumeRole
       Policies:
-        - PolicyName: ServerlessReactDDBUpdatePolicy
+        - PolicyName: ServerlessDDBUpdatePolicy
           PolicyDocument:
               Version: '2012-10-17'
               Statement:
@@ -121,4 +141,22 @@ Resources:
       Throttle:
         BurstLimit: 1
         RateLimit: 1
-      UsagePlanName: serverless-react-example-usageplan
+      UsagePlanName: serverless-example-usageplan
+  APICustomDomain:
+    Type: AWS::ApiGateway::DomainName
+    DependsOn: ServerlessRestApi
+    Properties:
+      DomainName: 
+        Fn::Join: [ "", ["api-serverless-example-", !Ref "AWS::Region", ".xinkuo.me"]]
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !FindInMap [RegionalCertificateArnMap, !Ref "AWS::Region", "arn"]
+  APIPathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    DependsOn: APICustomDomain
+    Properties:
+      DomainName:
+        Fn::Join: [ "", ["api-serverless-example-", !Ref "AWS::Region", ".xinkuo.me"]]
+      RestApiId: !Ref ServerlessRestApi
+      Stage: !Ref ServerlessRestApiProdStage

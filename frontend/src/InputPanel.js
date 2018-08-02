@@ -6,7 +6,7 @@ class InputPanel extends Component {
     super(props);
     // TODO: remove initial val
     this.state = {
-      value: Math.random()
+      value: ''
     }
     // This binding is necessary to make `this` work in the callback
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -47,9 +47,9 @@ class InputPanel extends Component {
     e.preventDefault();
     this.props.handleUpdate(this.state.value);
     // TODO: remove this
-    this.setState({
-      value: Math.random()
-    })
+    //this.setState({
+    //  value: Math.random()
+    //})
   }
 
   onValueChange(e) {

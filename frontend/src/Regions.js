@@ -6,9 +6,9 @@ class Region {
 }
 
 const regions = [
-  new Region('Virginia (us-east-1)', ''),
-  new Region('California (us-west-1)', ''),
-  new Region('Oregon (us-west-2)', '')
+  new Region('Virginia (us-east-1)', 'https://api-serverless-example-us-east-1.xinkuo.me'),
+  new Region('California (us-west-1)', 'https://api-serverless-example-us-west-1.xinkuo.me'),
+  new Region('Oregon (us-west-2)', 'https://api-serverless-example-us-west-2.xinkuo.me')
 ]
 
 export { regions }
