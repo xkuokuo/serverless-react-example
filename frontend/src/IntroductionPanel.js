@@ -15,8 +15,8 @@ class IntroductionPanel extends Component {
       <div className='IntroductionPanel row'>
       <div className='col-md-3 col-sm-6'>
       <h3>What</h3>
-      <p>This is a tool for testing AWS serverless latency across different AWS regions. </p>
-      <p><b>The whole application is serverless</b> and it's built on top of AWS S3, AWS CloudFront, AWS API Gateway, AWS Lambda, and AWS DynamoDB.</p>
+      <p>This is a minimum implementation of AWS Serverless web app, for testing AWS serverless latencies across different AWS regions. </p>
+      <p><b>The whole application is serverless</b> and it's built on top of AWS S3, AWS CloudFront, AWS API Gateway, AWS Lambda, and AWS DynamoDB. <a href="https://github.com/xkuokuo/serverless-react-example#system-diagram">More Info</a></p>
       </div>
       <div className='col-md-3 col-sm-6'>
       <h3>Why</h3>

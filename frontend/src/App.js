@@ -50,7 +50,7 @@ class App extends Component {
       <div className='loader'></div>
       </div>
       <header className='App-header card'>
-      <h1 className='App-title'>Enjoy Serverless React Application</h1>
+      <h1 className='App-title'>Serverless Application Testing Dashboard</h1>
       </header>
       <div className='row'>
       <div className='col-md-12 col-sm-12'>
