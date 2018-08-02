@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import './InputPanel.scss';
 
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
+
 class InputPanel extends Component {
   constructor(props) {
     super(props);
@@ -45,11 +49,8 @@ class InputPanel extends Component {
 
   handleUpdate(e) {
     e.preventDefault();
-    this.props.handleUpdate(this.state.value);
-    // TODO: remove this
-    //this.setState({
-    //  value: Math.random()
-    //})
+    if (!isEmptyOrSpaces(this.state.value))
+      this.props.handleUpdate(this.state.value);
   }
 
   onValueChange(e) {

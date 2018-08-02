@@ -21,6 +21,14 @@ Mappings:
       arn: arn:aws:acm:us-west-1:198711792892:certificate/3d2c608e-6d9c-4b62-ad17-9151635b5ff9
     us-west-2: 
       arn: arn:aws:acm:us-west-2:198711792892:certificate/68a17c24-3e9e-4f03-aa92-a84fcb54d17a
+    ap-northeast-1: 
+      arn: arn:aws:acm:ap-northeast-1:198711792892:certificate/12ddf7d2-e658-4a7b-9af9-85dda02fb9a5
+    ap-northeast-2:
+      arn: arn:aws:acm:ap-northeast-2:198711792892:certificate/93e68abb-6645-454b-9640-113b83fe1748
+    ap-southeast-1:
+      arn: arn:aws:acm:ap-southeast-1:198711792892:certificate/5699cfc4-d433-423b-aac9-f5cfe7c93e32
+    eu-west-1:
+      arn: arn:aws:acm:eu-west-1:198711792892:certificate/55b83369-3a24-46da-abc6-003ea9f29ff3
 Resources:
   LambdaFunctionStorageBucket:
     Type: AWS::S3::Bucket
